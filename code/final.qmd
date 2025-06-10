@@ -3,3 +3,22 @@ title: "final"
 format: html
 ---
 
+Github repo: https://github.com/kathrynk04/ENVS-193DS_spring-2025_final.git
+
+```{r}
+
+```
+
+## Problem 1
+
+# a. Transparent statistical methods
+
+In part 1, they used Pearson's r. In part 2, they used a one-way ANOVA.
+
+# b. More information needed
+
+Another test that should be included is Tukey's HSD in order to determine which source group means are different from each other. A piece of additional information that should be included is the effect size, which is the eta squared, to determine how large of an effect the source had on average nitrogen load.
+
+# c. Suggestions for rewriting
+
+We found a relationship (Pearson's r = correlation coefficient) between distance from headwater and annual total nitrogen load, where distance from headwater significantly predicted annual total nitrogen load (F(degrees of freedom, 1) = F-statistic, p = 0.03, $\alpha$ = significance level). We found a difference between sources in average nitrogen load (one-way ANOvA, F(4, within groups df) = F-statistic, p = 0.02, $\alpha$ = significance level).
