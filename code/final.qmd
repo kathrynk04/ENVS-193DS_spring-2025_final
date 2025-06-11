@@ -6,7 +6,7 @@ format: html
 Github repo: https://github.com/kathrynk04/ENVS-193DS_spring-2025_final.git
 
 ```{r message=FALSE}
-library(tidyverse)
+library(tidyverse) # loading packages
 library(janitor)
 library(here)
 library(ggeffects)
@@ -14,7 +14,7 @@ library(MuMIn)
 library(DHARMa)
 
 sst <- read_csv(
-  here("data", "SST_update2023.csv"))
+  here("data", "SST_update2023.csv")) # reading in the data
 ```
 
 ## Problem 1: Research writing
@@ -107,20 +107,20 @@ ggplot(data = sst_clean, # making the data frame from sst_clean
 ## Problem 3: Data analysis
 
 ```{r message=FALSE}
-nest_boxes <- read_csv(here("data", "occdist.csv"))
+nest_boxes <- read_csv(here("data", "occdist.csv")) # reading in the data
 ```
 
 ```{r}
 #| echo: false
 
-nest_boxes_clean <- nest_boxes |>
-  clean_names() 
+nest_boxes_clean <- nest_boxes |> # making a nest_boxes_clean object
+  clean_names() # cleaning the names
 ```
 
 
 # a. Response variable
 
-In this dataset, a 1 indicates the presence of one of the three bird species, Common Starling, Swift Parrot, or Tree Martin, in a nest, or if the 1 is under the column labeled "e", then that means the nest was empty.
+In this dataset, a 1 indicates the presence of one of the three bird species, Common Starling, Swift Parrot, or Tree Martin, in a nest, and a 0 indicates that species isn't present. However, if the 1 is under the column labeled "e", then that means the nest was empty, and if there's a 0 in one of those columns, that means the nest wasn't empty.
 
 # b. Purpose of study
 
@@ -194,8 +194,8 @@ AICc(model1,
 
 My visualizations are different from each other in the way that I've represented my data because my exploratory visualization compares in the form of boxplots the average amount of time I spent studying when I consumed coffee either while studying or not at all, while my affective visualization shows how much time I spent studying each day and how much caffeine I consumed. In my exploratory visualization, you can't tell how much caffeine I consumed each day that I studied, whereas you can tell by the size of the coffee stain in my affective visualization. Additionally, you can't tell when I consumed caffeine relative to studying in my affective visualization, but you can based on the x-axis label under each boxplot in my exploratory visualization.
 
-My visualizations are all similar because they show how much time I spent studying, but that's the only thing they all have in common.
+My visualizations are all similar because they show how much time I spent studying each day, but that's the only thing they all have in common.
 
 In my exploratory visualization, you can see that I spent more average time studying whenever I consumed caffeine, but it's much harder, or impossible, to see this distinction in my affective visualization. This is due to the fact that my affective visualization doesn't display the average time spent studying when I consumed caffeine and when I didn't, so it's much harder to compare based on the size of the papers and coffee stains in my affective visualization alone.
 
-I got feedback from one of my peers to darken the shading of the coffee stains in my affective visualization, which I did end up doing and only hadn't done yet because my draft was traced in pen instead of pencil and I didn't want to cover the pencil lines, and she also suggested I include an explanation for the size of the pages, which I was able to explain in my artist statement. My instructor suggested defining the proportion of caffeine, which I was also able to define as the proportion of caffeine consumed each day in my artist statement, and that I draw zig-zags instead of straight lines on my paper. However, I wasn't able to do this because some of the sample days I studied for over 300 or 400 minutes, so it would've taken me a really long time to measure out every centimeter of the zig-zags until I reached over 300 centimeters for multiple days, although I do agree it would've looked cool.
+I got feedback from one of my peers to darken the shading of the coffee stains in my affective visualization, which I did end up doing and only hadn't done yet because my draft was traced in pen instead of pencil and I didn't want to cover the pencil lines, and she also suggested I include an explanation for the size of the pages, which I was able to explain in my artist statement. My instructor suggested defining the proportion of caffeine, which I was also able to define as the proportion of caffeine consumed each day in my artist statement, and that I draw zig-zags instead of straight lines on my paper. However, I wasn't able to do this because on some of the sample days I studied for over 300 or 400 minutes, so it would've taken me a really long time to measure out every centimeter of the zig-zags until I reached over 300 centimeters for multiple days, although I do agree it would've looked cool.
