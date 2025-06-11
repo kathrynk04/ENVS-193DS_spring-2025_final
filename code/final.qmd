@@ -5,11 +5,16 @@ format: html
 
 Github repo: https://github.com/kathrynk04/ENVS-193DS_spring-2025_final.git
 
-```{r}
+```{r message=FALSE}
+library(tidyverse)
+library(janitor)
+library(here)
 
+sst <- read_csv(
+  here("data", "SST_update2023.csv"))
 ```
 
-## Problem 1
+## Problem 1: Research writing
 
 # a. Transparent statistical methods
 
@@ -22,3 +27,86 @@ Another test that should be included is Tukey's HSD in order to determine which 
 # c. Suggestions for rewriting
 
 We found a relationship (Pearson's r = correlation coefficient) between distance from headwater and annual total nitrogen load, where distance from headwater significantly predicted annual total nitrogen load (F(degrees of freedom, 1) = F-statistic, p = 0.03, $\alpha$ = significance level). We found a difference between sources in average nitrogen load (one-way ANOvA, F(4, within groups df) = F-statistic, p = 0.02, $\alpha$ = significance level).
+
+## Problem 2: Data visualization
+
+# a. Cleaning and summarizing
+
+```{r message=FALSE}
+sst_clean <- sst |> 
+  mutate(year(date),) |>
+  mutate(month(date)) |> 
+  clean_names() |> 
+  filter(year_date > '2017') |> 
+  rename(year = year_date,
+         month = month_date) |> 
+  mutate(month = as_factor(month),
+         month = case_match(
+    month,
+    "1" ~ "Jan",
+    "2" ~ "Feb",
+    "3" ~ "Mar",
+    "4" ~ "Apr",
+    "5" ~ "May",
+    "6" ~ "Jun",
+    "7" ~ "Jul",
+    "8" ~ "Aug",
+    "9" ~ "Sep",
+    "10" ~ "Oct",
+    "11" ~ "Nov",
+    "12" ~ "Dec"
+  )) |> 
+  group_by(month, year) |> 
+  summarize(mean_monthly_sst = mean(temp)) |> 
+  select(year, month, mean_monthly_sst) |> 
+  mutate(year = as_factor(year),
+         year = fct_relevel(year,
+                            "2018",
+                            "2019",
+                            "2020",
+                            "2021",
+                            "2022",
+                            "2023")) |> 
+  mutate(month = factor(month,
+                        ordered =TRUE,
+                        levels = c("Jan", 
+                                   "Feb", 
+                                   "Mar", 
+                                   "Apr", 
+                                   "May", 
+                                   "Jun", 
+                                   "Jul", 
+                                   "Aug", 
+                                   "Sep", 
+                                   "Oct", 
+                                   "Nov", 
+                                   "Dec"))) 
+
+sst_clean$mean_monthly_sst <- round(sst_clean$mean_monthly_sst, 1)
+
+slice_sample(sst_clean, n = 5)
+```
+
+# b. Visualize the data
+
+```{r message=FALSE}
+ggplot(data = sst_clean,
+       aes(x = month,
+           y = mean_monthly_sst,
+           color = year,
+           group = year)) +
+  geom_point() +
+  geom_line() +
+  scale_color_manual(values = c("2018" = "red", # assigning different colors to each year
+                                "2019" = "orange",
+                                "2020" = "yellow",
+                                "2021" = "green",
+                                "2022" = "blue",
+                                "2023" = "purple")) +
+  labs(x = "Month", # labeling the x-axis as "Month"
+       y = "Total monthly rain (inches)", # labeling the y-axis as "Total monthly rain (inches)"
+       color = "Water year") + # coloring by water year
+  theme_bw() + # making the theme black and white
+  theme(panel.grid = element_blank())
+```
+
