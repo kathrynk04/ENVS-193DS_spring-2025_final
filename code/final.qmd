@@ -112,35 +112,35 @@ nest_boxes <- read_csv(here("data", "occdist.csv"))
 ```{r}
 #| echo: false
 
-nest_boxes_clean <- nest_boxes |> 
-  clean_names() |> 
-  pivot_longer(cols = c(sp, cs, e, tm),
-               names_to = "species_code",
-               values_to = "presence"
-  ) |> 
-   mutate(species = case_match(species_code,
-                               "sp" ~ "Swift Parrot",
-                               "cs" ~ "Common Starling",
-                               "e"  ~ "Empty",
-                               "tm" ~ "Tree Martin"),
-          species = as_factor(species),
-          species = fct_relevel(species,
-                                "Empty",
-                                "Swift Parrot",
-                                "Common Starling",
-                                "Tree Martin")) |> 
-  mutate(edge_distance = as.numeric(edge_distance)) |> 
-  # making sure that water_treatment is a factor and ordering levels
-  mutate(season = as_factor(season),
-         season = fct_relevel(season,
-                                       "2016",
-                                       "2019")) |> 
-  # selecting columns
-  select(species, presence, edge_distance, season) |> 
-  group_by(species, season) |>  # or add edge_distance for finer resolution
-  summarise(count = sum(presence), .groups = "drop")
-
-str(nest_boxes_clean)
+nest_boxes_clean <- nest_boxes |>
+  clean_names() #|>
+#   pivot_longer(cols = c(sp, cs, e, tm),
+#                names_to = "species_code",
+#                values_to = "presence"
+#   ) |> 
+#    mutate(species = case_match(species_code,
+#                                "sp" ~ "Swift Parrot",
+#                                "cs" ~ "Common Starling",
+#                                "e"  ~ "Empty",
+#                                "tm" ~ "Tree Martin"),
+#           species = as_factor(species),
+#           species = fct_relevel(species,
+#                                 "Empty",
+#                                 "Swift Parrot",
+#                                 "Common Starling",
+#                                 "Tree Martin")) |> 
+#   mutate(edge_distance = as.numeric(edge_distance)) |> 
+#   # making sure that water_treatment is a factor and ordering levels
+#   mutate(season = as_factor(season),
+#          season = fct_relevel(season,
+#                                        "2016",
+#                                        "2019")) |> 
+#   # selecting columns
+#   select(species, presence, edge_distance, season) |> 
+#   group_by(species, season) |>  # or add edge_distance for finer resolution
+#   summarise(count = sum(presence), .groups = "drop")
+# 
+# str(nest_boxes_clean)
 ```
 
 
@@ -158,39 +158,43 @@ The seasons are the summer in 2016 and 2019, and the difference between these se
 
 # d. Table of models
 
+4 models total:
+
+| Model number | Season | Edge Distance | Predictor list              |  
+|:------------:|:------:|:-------------:|-----------------------------|  
+| 0            |        |               | no predictors (null model)  |
+| 1            |    X   |       X       | all predictors (full model) | 
+| 2            |        |       X       | edge distance               |   
+| 3            |    X   |               | season                      |  
+
+# e. Run the models
+
 ```{r message=FALSE}
-# Filter just Swift Parrot rows
-swift_data <- filter(nest_boxes_clean, species == "Swift Parrot")
+model0 <- glm(sp ~ 1,
+  data = nest_boxes_clean,  # or add edge_distance if grouped that way
+  family = "binomial")
 
-model1 <- lm(
-  count ~ 1,  # or add edge_distance if grouped that way
-  data = filter(nest_boxes_counts, species == "Swift Parrot")
-)
-
-names(model0) <- unique(nest_boxes_clean$species)
 
 # Model 1: all predictors
-model1 <- glm(
-  presence ~ edge_distance + season,
-  data = swift_data,
+model1 <- glm(sp ~ edge_distance + season,
+  data = nest_boxes_clean,
   family = "binomial"
 )
 
 # Model 2: edge_distance only
-model2 <- glm(
-  presence ~ edge_distance,
-  data = swift_data,
+model2 <- glm(sp ~ edge_distance,
+  data = nest_boxes_clean,
   family = "binomial"
 )
 
 # Model 3: season only
-model3 <- glm(
-  presence ~ season,
-  data = swift_data,
+model3 <- glm(sp ~ season,
+  data = nest_boxes_clean,
   family = "binomial"
 )
 ```
 
+# f. Check the diagnostics
 
 ## Problem 4: Affective and exploratory eisualizations
 
