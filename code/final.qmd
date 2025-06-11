@@ -33,58 +33,47 @@ We found a relationship (Pearson's r = correlation coefficient) between distance
 # a. Cleaning and summarizing
 
 ```{r message=FALSE}
-sst_clean <- sst |> 
-  mutate(year(date),) |>
-  mutate(month(date)) |> 
-  clean_names() |> 
-  filter(year_date > '2017') |> 
-  rename(year = year_date,
-         month = month_date) |> 
-  mutate(month = as_factor(month),
-         month = case_match(
-    month,
-    "1" ~ "Jan",
-    "2" ~ "Feb",
-    "3" ~ "Mar",
-    "4" ~ "Apr",
-    "5" ~ "May",
-    "6" ~ "Jun",
-    "7" ~ "Jul",
-    "8" ~ "Aug",
-    "9" ~ "Sep",
-    "10" ~ "Oct",
-    "11" ~ "Nov",
-    "12" ~ "Dec"
-  )) |> 
-  group_by(month, year) |> 
-  summarize(mean_monthly_sst = mean(temp)) |> 
-  select(year, month, mean_monthly_sst) |> 
-  mutate(year = as_factor(year),
-         year = fct_relevel(year,
-                            "2018",
-                            "2019",
-                            "2020",
-                            "2021",
-                            "2022",
-                            "2023")) |> 
-  mutate(month = factor(month,
-                        ordered =TRUE,
-                        levels = c("Jan", 
-                                   "Feb", 
-                                   "Mar", 
-                                   "Apr", 
-                                   "May", 
-                                   "Jun", 
-                                   "Jul", 
-                                   "Aug", 
-                                   "Sep", 
-                                   "Oct", 
-                                   "Nov", 
-                                   "Dec"))) 
+sst_clean <- sst |> # storing the data into a new cleaned data frame
+  clean_names() |> #
+  mutate(year = year(date),
+         month = month(date)) |>
+  filter(year > 2017) |>
+  mutate(month = case_match(as.character(month),
+                            "1" ~ "Jan",
+                            "2" ~ "Feb",
+                            "3" ~ "Mar",
+                            "4" ~ "Apr",
+                            "5" ~ "May",
+                            "6" ~ "Jun",
+                            "7" ~ "Jul",
+                            "8" ~ "Aug",
+                            "9" ~ "Sep",
+                            "10" ~ "Oct",
+                            "11" ~ "Nov",
+                            "12" ~ "Dec"),
+         month = factor(month,
+                        levels = c("Jan",
+                                   "Feb",
+                                   "Mar",
+                                   "Apr",
+                                   "May",
+                                   "Jun",
+                                   "Jul",
+                                   "Aug",
+                                   "Sep",
+                                   "Oct",
+                                   "Nov",
+                                   "Dec"),
+                        ordered = TRUE),
+         year = factor(as.character(year),
+                       levels = as.character(2018:2023),
+                       ordered = FALSE)) |>
+  group_by(year, month) |>
+  summarize(mean_monthly_sst = mean(temp),
+            .groups = "drop") |>
+  mutate(mean_monthly_sst = round(mean_monthly_sst, 1)) # Round result
 
-sst_clean$mean_monthly_sst <- round(sst_clean$mean_monthly_sst, 1)
-
-slice_sample(sst_clean, n = 5)
+str(sst_clean)
 ```
 
 # b. Visualize the data
@@ -104,9 +93,9 @@ ggplot(data = sst_clean,
                                 "2022" = "blue",
                                 "2023" = "purple")) +
   labs(x = "Month", # labeling the x-axis as "Month"
-       y = "Total monthly rain (inches)", # labeling the y-axis as "Total monthly rain (inches)"
-       color = "Water year") + # coloring by water year
+       y = "Mean monthly sea surface temperature (°C)") +
   theme_bw() + # making the theme black and white
-  theme(panel.grid = element_blank())
+  theme(panel.grid = element_blank(),
+        legend.location = "plot")
 ```
 
