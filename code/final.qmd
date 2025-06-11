@@ -11,6 +11,7 @@ library(janitor)
 library(here)
 library(ggeffects)
 library(MuMIn)
+library(DHARMa)
 
 sst <- read_csv(
   here("data", "SST_update2023.csv"))
@@ -195,6 +196,14 @@ model3 <- glm(sp ~ season,
 ```
 
 # f. Check the diagnostics
+
+```{r message=FALSE}
+plot(simulateResiduals(model0))
+plot(simulateResiduals(model1))
+plot(simulateResiduals(model2))
+plot(simulateResiduals(model3))
+```
+
 
 ## Problem 4: Affective and exploratory eisualizations
 
