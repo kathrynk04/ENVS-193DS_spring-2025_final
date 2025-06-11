@@ -37,11 +37,11 @@ We found a relationship (Pearson's r = correlation coefficient) between distance
 
 ```{r message=FALSE}
 sst_clean <- sst |> # storing the data into a new cleaned data frame
-  clean_names() |> #
-  mutate(year = year(date),
-         month = month(date)) |>
-  filter(year > 2017) |>
-  mutate(month = case_match(as.character(month),
+  clean_names() |> # cleaning the names
+  mutate(year = year(date), # extracting the year from the date column
+         month = month(date)) |> # extracting the month from the date column
+  filter(year > 2017) |> # filtering to only include years since 2018
+  mutate(month = case_match(as.character(month), # changing the month numbers to abbreviations
                             "1" ~ "Jan",
                             "2" ~ "Feb",
                             "3" ~ "Mar",
@@ -54,7 +54,7 @@ sst_clean <- sst |> # storing the data into a new cleaned data frame
                             "10" ~ "Oct",
                             "11" ~ "Nov",
                             "12" ~ "Dec"),
-         month = factor(month,
+         month = factor(month, # making month an ordered factor and selecting the levels
                         levels = c("Jan",
                                    "Feb",
                                    "Mar",
@@ -68,41 +68,41 @@ sst_clean <- sst |> # storing the data into a new cleaned data frame
                                    "Nov",
                                    "Dec"),
                         ordered = TRUE),
-         year = factor(as.character(year),
+         year = factor(as.character(year), # making year a factor and selecting the levels
                        levels = as.character(2018:2023),
                        ordered = FALSE)) |>
-  group_by(year, month) |>
-  summarize(mean_monthly_sst = mean(temp),
+  group_by(year, month) |> # grouping by year and month
+  summarize(mean_monthly_sst = mean(temp), # calculating the mean monthly sst for each month in each year
             .groups = "drop") |>
-  mutate(mean_monthly_sst = round(mean_monthly_sst, 1)) # Round result
+  mutate(mean_monthly_sst = round(mean_monthly_sst, 1)) # rounding mean monthly ssts to 1 decimal place
 
-str(sst_clean)
+print(str(sst_clean)) # displaying the structure of sst_clean
 
-slice_sample(sst_clean, n = 5)
+print(slice_sample(sst_clean, n = 5)) # displaying 5 rows from sst_clean
 ```
 
 # b. Visualize the data
 
 ```{r message=FALSE}
-ggplot(data = sst_clean,
-       aes(x = month,
-           y = mean_monthly_sst,
-           color = year,
-           group = year)) +
-  geom_point() +
-  geom_line() +
+ggplot(data = sst_clean, # making the data frame from sst_clean
+       aes(x = month, # setting month as x-axis
+           y = mean_monthly_sst, # setting mean_monthly_sst as y-axis
+           color = year, # coloring by year
+           group = year)) + # grouping by year
+  geom_point() + # adding points onto plot
+  geom_line() + # adding lines onto plot
   scale_color_manual(values = c("2018" = "cadetblue1", # assigning different colors to each year
                                 "2019" = "cadetblue3",
                                 "2020" = "cadetblue",
                                 "2021" = "cadetblue4",
                                 "2022" = "darkblue",
                                 "2023" = "black")) +
-  labs(x = "Month", # labeling the x-axis as "Month"
-       y = "Mean monthly sea surface temperature (°C)") +
+  labs(x = "Month", # labeling the x-axis
+       y = "Mean monthly sea surface temperature (°C)") + # labeling the y-axis
   theme_bw() + # making the theme black and white
-  theme(panel.grid = element_blank(),
-        legend.position = "inside", legend.position.inside =  c(.1, 0.75)) +
-  guides(color = guide_legend("Year"))
+  theme(panel.grid = element_blank(), # removing panel grid
+        legend.position = "inside", legend.position.inside =  c(.1, 0.75)) + # putting the legend in the top left corner inside panel
+  guides(color = guide_legend("Year")) # changing the legend name
 ```
 ## Problem 3: Data analysis
 
@@ -114,34 +114,7 @@ nest_boxes <- read_csv(here("data", "occdist.csv"))
 #| echo: false
 
 nest_boxes_clean <- nest_boxes |>
-  clean_names() #|>
-#   pivot_longer(cols = c(sp, cs, e, tm),
-#                names_to = "species_code",
-#                values_to = "presence"
-#   ) |> 
-#    mutate(species = case_match(species_code,
-#                                "sp" ~ "Swift Parrot",
-#                                "cs" ~ "Common Starling",
-#                                "e"  ~ "Empty",
-#                                "tm" ~ "Tree Martin"),
-#           species = as_factor(species),
-#           species = fct_relevel(species,
-#                                 "Empty",
-#                                 "Swift Parrot",
-#                                 "Common Starling",
-#                                 "Tree Martin")) |> 
-#   mutate(edge_distance = as.numeric(edge_distance)) |> 
-#   # making sure that water_treatment is a factor and ordering levels
-#   mutate(season = as_factor(season),
-#          season = fct_relevel(season,
-#                                        "2016",
-#                                        "2019")) |> 
-#   # selecting columns
-#   select(species, presence, edge_distance, season) |> 
-#   group_by(species, season) |>  # or add edge_distance for finer resolution
-#   summarise(count = sum(presence), .groups = "drop")
-# 
-# str(nest_boxes_clean)
+  clean_names() 
 ```
 
 
@@ -204,6 +177,16 @@ plot(simulateResiduals(model2))
 plot(simulateResiduals(model3))
 ```
 
+# g. Select the best model
+
+```{r message=FALSE}
+AICc(model1,
+     model2,
+     model3,
+     model0) |> 
+  arrange(AICc)
+```
+# h. Visualize the model predictions
 
 ## Problem 4: Affective and exploratory eisualizations
 
