@@ -98,6 +98,28 @@ ggplot(data = sst_clean,
   theme(panel.grid = element_blank(),
         legend.location = "plot")
 ```
+## Problem 3: Data analysis
+
+```{r message=FALSE}
+nest_boxes <- read_csv(here("data", "occdist.csv"))
+```
+
+
+# a. Response variable
+
+In this dataset, a 1 indicates the presence of one of the three bird species, Common Starling, Swift Parrot, or Tree Martin, in a nest, or if the 1 is under the column labeled "e", then that means the nest was empty.
+
+# b. Purpose of study
+
+The main difference between Swift Parrots and the other two species in the study is that the nests used in the study were intended to be used by Swift Parrots, because they're critically endangered. So, this study was able to determine how nest box distance from the forest edge and year impacted which species nested, therefore helping inform management in order to place nests in places that attract the target species.
+
+# c. Difference in "seasons"
+
+The seasons are the summer in 2016 and 2019, and the difference between these seasons was that the nests were considered new in 2016 and established in 2019.
+
+# d. Table of models
+
+
 
 ## Problem 4: Affective and exploratory eisualizations
 
