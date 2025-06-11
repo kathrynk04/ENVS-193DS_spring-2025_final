@@ -99,3 +99,14 @@ ggplot(data = sst_clean,
         legend.location = "plot")
 ```
 
+## Problem 4: Affective and exploratory eisualizations
+
+# a. Comparing visualizations
+
+My visualizations are different from each other in the way that I've represented my data because my exploratory visualization compares in the form of boxplots the average amount of time I spent studying when I consumed coffee either while studying or not at all, while my affective visualization shows how much time I spent studying each day and how much caffeine I consumed. In my exploratory visualization, you can't tell how much caffeine I consumed each day that I studied, whereas you can tell by the size of the coffee stain in my affective visualization. Additionally, you can't tell when I consumed caffeine relative to studying in my affective visualization, but you can based on the x-axis label under each boxplot in my exploratory visualization.
+
+My visualizations are all similar because they show how much time I spent studying, but that's the only thing they all have in common.
+
+In my exploratory visualization, you can see that I spent more average time studying whenever I consumed caffeine, but it's much harder, or impossible, to see this distinction in my affective visualization. This is due to the fact that my affective visualization doesn't display the average time spent studying when I consumed caffeine and when I didn't, so it's much harder to compare based on the size of the papers and coffee stains in my affective visualization alone.
+
+I got feedback from one of my peers to darken the shading of the coffee stains in my affective visualization, which I did end up doing and only hadn't done yet because my draft was traced in pen instead of pencil and I didn't want to cover the pencil lines, and she also suggested I include an explanation for the size of the pages, which I was able to explain in my artist statement. My instructor suggested defining the proportion of caffeine, which I was also able to define as the proportion of caffeine consumed each day in my artist statement, and that I draw zig-zags instead of straight lines on my paper. However, I wasn't able to do this because some of the sample days I studied for over 300 or 400 minutes, so it would've taken me a really long time to measure out every centimeter of the zig-zags until I reached over 300 centimeters for multiple days, although I do agree it would've looked cool.
