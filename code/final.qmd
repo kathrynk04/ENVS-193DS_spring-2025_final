@@ -217,13 +217,24 @@ ggplot(data = nest_boxes_clean, # setting up the data frame
   guides(color = guide_legend("Season")) # renaming the legend "Season"
 ```
 
+# i. Write a caption for your figure
+
+Figure 1: Model predictions and 95% confidence interval for probability of swift parrot nest occupancy according to distance from forest edge and season. Probability of swift parrot nest occupancy decreases with distance from forest edge, and probability is higher in 2016, when the nest was new, than in 2019, when the nest was established. 2016 is colored in pink and 2019 is colored in green. 95% confidence interval for both season predictions is represented by ribbons, with the 2016 ribbon colored pink and the 2019 ribbon colored green.
+
+Data citation: Stojanovic D, Owens G, Young CM, Alves F, Heinsohn R. 2020. Do nest boxes breed the target species or its competitors? A case study of a critically endangered bird. Restoration Ecology. 29(3). doi:https://doi.org/10.1111/rec.13319.
+
 # j. Calculate model predictions
 
 ```{r message=FALSE}
-ggpredict(model1,
-          terms = "edge_distance [0]",)
+ggpredict(model1, # predicting swift parrot nest occupancy from model1
+          terms = c("edge_distance [0]", "season")) # setting edge distance as 0 and creating a prediction for each season
+ggpredict(model1, # predicting swift parrot nest occupancy from model1
+          terms = c("edge_distance [900]", "season")) # setting edge distance as 100 and creating a prediction for each season
 ```
 
+# k. Interpret your results
+
+The predicted probability of swift parrot nest occupancy at the forest edge (0m) is 48% for 2016 and 30% for 2019. The predicted probability of swift parrot nest occupancy farther from the forest edge (900m) is 12% for 2016 and 6% for 2019. The negative slope of the model predictions in figure 1 indicate that distance from forest edge increases, probability of swift parrot nest occupancy decreases. The relationship between distance from forest edge and probability of swift parrot nest box occupancy can be explained by the fact that one of their nest competitors, tree martins, are a native species that often takes up nest boxes that are intended for swift parrots. But, tree martins prefer to occupy nests closer to forest edges, and this competition is what drives swift parrots to select nests further from the forest edge.
 
 ## Problem 4: Affective and exploratory eisualizations
 

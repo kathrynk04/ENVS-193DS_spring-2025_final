@@ -211,11 +211,11 @@ NULL</code></pre>
 <pre><code># A tibble: 5 × 3
   year  month mean_monthly_sst
   &lt;fct&gt; &lt;ord&gt;            &lt;dbl&gt;
-1 2018  Mar               13.5
-2 2022  Mar               13.3
-3 2018  Apr               12.8
-4 2023  Sep               18.4
-5 2018  Dec               15.6</code></pre>
+1 2019  Oct               17.1
+2 2020  Jul               17  
+3 2018  Aug               19.6
+4 2023  Oct               17.4
+5 2019  Jun               15.8</code></pre>
 </div>
 </div>
 </section>
@@ -430,22 +430,53 @@ model0  1 238.8318</code></pre>
 </div>
 </div>
 </section>
+<section id="i.-write-a-caption-for-your-figure" class="level1">
+<h1>i. Write a caption for your figure</h1>
+<p>Figure 1: Model predictions and 95% confidence interval for probability of swift parrot nest occupancy according to distance from forest edge and season. Probability of swift parrot nest occupancy decreases with distance from forest edge, and probability is higher in 2016, when the nest was new, than in 2019, when the nest was established. 2016 is colored in pink and 2019 is colored in green. 95% confidence interval for both season predictions is represented by ribbons, with the 2016 ribbon colored pink and the 2019 ribbon colored green.</p>
+<p>Data citation: Stojanovic D, Owens G, Young CM, Alves F, Heinsohn R. 2020. Do nest boxes breed the target species or its competitors? A case study of a critically endangered bird. Restoration Ecology. 29(3). doi:https://doi.org/10.1111/rec.13319.</p>
+</section>
 <section id="j.-calculate-model-predictions" class="level1">
 <h1>j. Calculate model predictions</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpredict</span>(model1,</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">terms =</span> <span class="st">"edge_distance [0]"</span>,)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpredict</span>(model1, <span class="co"># predicting swift parrot nest occupancy from model1</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"edge_distance [0]"</span>, <span class="st">"season"</span>)) <span class="co"># setting edge distance as 0 and creating a prediction for each season</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># Predicted probabilities of sp
 
+season: 2016
+
 edge_distance | Predicted |     95% CI
 --------------------------------------
-            0 |      0.38 | 0.26, 0.51
+            0 |      0.48 | 0.33, 0.64
 
-Adjusted for:
-* season = 2017.63</code></pre>
+season: 2019
+
+edge_distance | Predicted |     95% CI
+--------------------------------------
+            0 |      0.30 | 0.18, 0.44</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpredict</span>(model1, <span class="co"># predicting swift parrot nest occupancy from model1</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">"edge_distance [900]"</span>, <span class="st">"season"</span>)) <span class="co"># setting edge distance as 100 and creating a prediction for each season</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Predicted probabilities of sp
+
+season: 2016
+
+edge_distance | Predicted |     95% CI
+--------------------------------------
+          900 |      0.12 | 0.06, 0.24
+
+season: 2019
+
+edge_distance | Predicted |     95% CI
+--------------------------------------
+          900 |      0.06 | 0.03, 0.13</code></pre>
 </div>
 </div>
+</section>
+<section id="k.-interpret-your-results" class="level1">
+<h1>k. Interpret your results</h1>
+<p>The predicted probability of swift parrot nest occupancy at the forest edge (0m) is 48% for 2016 and 30% for 2019. The predicted probability of swift parrot nest occupancy farther from the forest edge (900m) is 12% for 2016 and 6% for 2019. The negative slope of the model predictions in figure 1 indicate that distance from forest edge increases, probability of swift parrot nest occupancy decreases. The relationship between distance from forest edge and probability of swift parrot nest box occupancy can be explained by the fact that one of their nest competitors, tree martins, are a native species that often takes up nest boxes that are intended for swift parrots. But, tree martins prefer to occupy nests closer to forest edges, and this competition is what drives swift parrots to select nests further from the forest edge.</p>
 <section id="problem-4-affective-and-exploratory-eisualizations" class="level2">
 <h2 class="anchored" data-anchor-id="problem-4-affective-and-exploratory-eisualizations">Problem 4: Affective and exploratory eisualizations</h2>
 </section>
