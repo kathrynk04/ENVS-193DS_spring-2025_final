@@ -1,5 +1,7 @@
 ---
-title: "final"
+title: "ENVS 193DS Final"
+author: "Kathryn Kolb"
+date: "06/11/2025"
 format: html
 ---
 
@@ -15,6 +17,8 @@ library(DHARMa)
 
 sst <- read_csv(
   here("data", "SST_update2023.csv")) # reading in the data
+
+nest_boxes <- read_csv(here("data", "occdist.csv")) # reading in the data
 ```
 
 ## Problem 1: Research writing
@@ -105,10 +109,6 @@ ggplot(data = sst_clean, # making the data frame from sst_clean
   guides(color = guide_legend("Year")) # changing the legend name
 ```
 ## Problem 3: Data analysis
-
-```{r message=FALSE}
-nest_boxes <- read_csv(here("data", "occdist.csv")) # reading in the data
-```
 
 ```{r}
 #| echo: false
