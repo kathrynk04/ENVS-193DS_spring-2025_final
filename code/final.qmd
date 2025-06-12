@@ -144,25 +144,21 @@ The seasons are the summer in 2016 and 2019, and the difference between these se
 # e. Run the models
 
 ```{r message=FALSE}
-model0 <- glm(sp ~ 1,
-  data = nest_boxes_clean,  # or add edge_distance if grouped that way
+model0 <- glm(sp ~ 1, # creating null model
+  data = nest_boxes_clean, 
   family = "binomial")
 
-
-# Model 1: all predictors
-model1 <- glm(sp ~ edge_distance + season,
+model1 <- glm(sp ~ edge_distance + season, # creating full model (edge distance and season)
   data = nest_boxes_clean,
   family = "binomial"
 )
 
-# Model 2: edge_distance only
-model2 <- glm(sp ~ edge_distance,
+model2 <- glm(sp ~ edge_distance, # creating model with edge distance as predictor
   data = nest_boxes_clean,
   family = "binomial"
 )
 
-# Model 3: season only
-model3 <- glm(sp ~ season,
+model3 <- glm(sp ~ season, # creating model with season as predictor
   data = nest_boxes_clean,
   family = "binomial"
 )
@@ -171,22 +167,63 @@ model3 <- glm(sp ~ season,
 # f. Check the diagnostics
 
 ```{r message=FALSE}
-plot(simulateResiduals(model0))
-plot(simulateResiduals(model1))
-plot(simulateResiduals(model2))
-plot(simulateResiduals(model3))
+par(mfrow = c(2, 2))
+plot(simulateResiduals(model0)) # checking diagnostics for model0
+plot(simulateResiduals(model1)) # checking diagnostics for model1
+plot(simulateResiduals(model2)) # checking diagnostics for model2
+plot(simulateResiduals(model3)) # checking diagnostics for model3
 ```
 
 # g. Select the best model
 
 ```{r message=FALSE}
-AICc(model1,
+AICc(model1, # using Akaike's Information Criterion to determine which model is best
      model2,
      model3,
      model0) |> 
-  arrange(AICc)
+  arrange(AICc) # arranging in order of lowest AICc value
 ```
+The best model as determined by Akaike's Information Criterion (AIC) that predicts the presence of Swift Parrots includes edge distance and season.
+
 # h. Visualize the model predictions
+
+```{r message=FALSE}
+mod_preds <- ggpredict(model1, # creating the model predictions data set and naming the mmodel
+                       terms =  c("edge_distance", "season")) |> # naming the predictors`
+  rename(edge_distance = x, # renaming x column as "edge_distance"
+         season = group) # renaming group column as "season"
+
+ggplot(data = nest_boxes_clean, # setting up the data frame
+       aes(x = edge_distance, # putting edge distance on x-axis
+           y = sp, # putting swift parrot presence on y-axis
+           group = season, # grouping by season
+           color = as_factor(season))) + # coloring by season and making season a factor
+  labs(x = "Edge Distance", # changing the x-axis label
+       y = "Swift Parrot Nest Occupancy") + # changing the y-axis label
+  geom_point(size = 3, # dispaying nest_boxes_clean data points
+             alpha = 0.4) +
+  geom_ribbon(data = mod_preds, # displaying the 95% CI for the model predictions
+                  aes(x = edge_distance, # putting edge_distance on x-axis
+                      y = predicted, # putting swift parrot presence prediction on y-axis
+                      ymin = conf.low, # displaying the upper and lower bounds of the 95% CI
+                      ymax = conf.high),
+              alpha = 0.4) +
+  geom_line(data = mod_preds, # displaying a line plot for model prediction
+            aes(x = edge_distance, # putting edge distance on x-axis
+                y = predicted)) + # putting swift parrot presence prediction on y-axis
+  scale_color_manual(values = c("2016" = "pink", # coloring 2016 data pink
+                                "2019" = "green")) + # coloring 2019 data green
+  theme(panel.grid = element_blank()) + # getting rid of panel grid
+  guides(color = guide_legend("Season")) # renaming the legend "Season"
+```
+
+# j. Calculate model predictions
+
+```{r message=FALSE}
+ggpredict(model1,
+          terms = "edge_distance [0]",)
+```
+
 
 ## Problem 4: Affective and exploratory eisualizations
 
